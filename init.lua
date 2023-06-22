@@ -41,10 +41,14 @@ require("lazy").setup('plugins')
 vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 
+vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>qq", ":quitall!<CR>")
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
+vim.keymap.set("n", "<leader>sa", ':lua vim.lsp.buf.code_action()<CR>')
 
 -- setup theme
 vim.g.everforest_background = 'soft'
@@ -55,7 +59,10 @@ vim.cmd [[ colorscheme everforest ]]
 -- plugins setup
 require('lualine').setup({
   options = {
-    theme = 'everforest'
+    theme = 'everforest',
+    disabled_filetypes = {
+      'NvimTree'
+    },
   }
 })
 
