@@ -43,12 +43,15 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>qq", ":quitall!<CR>")
+vim.keymap.set("n", "<leader>qf", ":q<CR>")
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
-vim.keymap.set("n", "<leader>sa", ':lua vim.lsp.buf.code_action()<CR>')
+vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
+vim.keymap.set("n", "<leader>tt", ':TroubleToggle<CR>', { silent = true })
+vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
 
 -- setup theme
 vim.g.everforest_background = 'soft'
@@ -141,6 +144,7 @@ require('gitsigns').setup()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+
 local lspconfig = require("lspconfig")
 lspconfig.cssls.setup({
   capabilities = capabilities
@@ -154,3 +158,64 @@ lspconfig.eslint.setup({
   end,
   capabilities = capabilities
 })
+
+-- this is for diagnositcs signs on the line number column
+-- use this to beautify the plain E W signs to more fun ones
+-- !important nerdfonts needs to be setup for this to work in your terminal
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl= hl, numhl = hl })
+end
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+      virtual_text = false,
+      signs = true,
+      update_in_insert = false,
+      underline = true,
+    }
+)
+
+local dap, dapui = require("dap"), require("dapui")
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+vim.keymap.set("n", "<leader>sb", ":DapToggleBreakpoint<CR>")
+vim.keymap.set("n", "<leader>sd", ":DapContinue<CR>")
+
+dap.adapters.codelldb = {
+  type = 'server',
+  port = "${port}",
+  executable = {
+    command = vim.fn.stdpath('data') .. '/mason/bin/codelldb' ,
+    args = {"--port", "${port}"},
+  }
+}
+
+dap.configurations.rust = {
+  {
+    name = "Rust debug",
+    type = "codelldb",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = true,
+  },
+}
+
+require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+
+require("lsp_lines").setup()
