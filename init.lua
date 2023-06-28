@@ -10,6 +10,8 @@ vim.o.smartindent = true
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 
+vim.opt.colorcolumn = "80"
+
 vim.opt.wrap = false
 
 vim.opt.swapfile = false
@@ -121,7 +123,13 @@ require('nvim-treesitter.configs').setup({
   },
 })
 
-require("nvim-tree").setup()
+require("nvim-tree").setup({
+  update_focused_file = {
+    enable = true,
+    update_cwd = true,
+    ignore_list = {},
+  }
+})
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
 vim.keymap.set("n", "<leader>1", ":NvimTreeFocus<CR>", { silent = true })
 
