@@ -11,7 +11,9 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 
 vim.opt.colorcolumn = "80"
+vim.opt.updatetime = 300
 
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.wrap = false
 
 vim.opt.swapfile = false
@@ -164,6 +166,10 @@ lspconfig.eslint.setup({
       command = "EslintFixAll",
     })
   end,
+  capabilities = capabilities
+})
+lspconfig.tsserver.setup({
+  single_file_support = false,
   capabilities = capabilities
 })
 
