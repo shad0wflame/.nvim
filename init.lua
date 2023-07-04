@@ -125,6 +125,12 @@ require('nvim-treesitter.configs').setup({
   },
 })
 
+-- Folding options
+vim.opt.foldlevel = 20
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.wo.foldcolumn = "3"
+
 require("nvim-tree").setup({
   update_focused_file = {
     enable = true,
@@ -156,9 +162,12 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 
 local lspconfig = require("lspconfig")
+local util = require("lspconfig/util")
+
 lspconfig.cssls.setup({
   capabilities = capabilities
 })
+
 lspconfig.eslint.setup({
   on_attach = function(client, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -168,10 +177,22 @@ lspconfig.eslint.setup({
   end,
   capabilities = capabilities
 })
+
+--[[
 lspconfig.tsserver.setup({
-  single_file_support = false,
+  auto_start = true,
+  single_file_support = true,
+  flags = {
+    debounce_text_changes = 150
+  },
+  root_dir = function (pattern)
+    local cwd  = vim.loop.cwd();
+    local root = util.root_pattern("package.json", "tsconfig.json", ".git")(pattern);
+    return root or cwd;
+  end,
   capabilities = capabilities
 })
+]]--
 
 -- this is for diagnositcs signs on the line number column
 -- use this to beautify the plain E W signs to more fun ones
