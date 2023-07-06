@@ -1,5 +1,5 @@
 vim.g.loaded_netrw = 1
-vim.g.loaded_netwrPlugin = 1
+vim.g.loaded_netrwPlugin = 1
 
 vim.wo.number = true
 vim.wo.relativenumber = true
@@ -46,8 +46,9 @@ vim.keymap.set("v", "<S-Up>", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
+vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader>qq", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>qf", ":q<CR>")
+vim.keymap.set("n", "<leader>q", ":bdelete<CR>")
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
@@ -126,10 +127,24 @@ require('nvim-treesitter.configs').setup({
 })
 
 -- Folding options
-vim.opt.foldlevel = 20
+vim.opt.foldlevel = 99
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.wo.foldcolumn = "3"
+vim.wo.foldcolumn = "1"
+vim.o.statuscolumn = "%l%s%C"
+
+local bin = require("statuscol.builtin")
+require("statuscol").setup({
+  segments = {
+    { text = { "%s" }, click = "v:lua.ScSa" },
+    { text = { bin.lnumfunc }, click = "v:lua.ScLa", },
+    {
+      text = { " ", bin.foldfunc, " " },
+      condition = { bin.not_empty, true, builtin.not_empty },
+      click = "v:lua.ScFa"
+    },
+  }
+})
 
 require("nvim-tree").setup({
   update_focused_file = {
@@ -138,6 +153,7 @@ require("nvim-tree").setup({
     ignore_list = {},
   }
 })
+
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
 vim.keymap.set("n", "<leader>1", ":NvimTreeFocus<CR>", { silent = true })
 
@@ -178,10 +194,9 @@ lspconfig.eslint.setup({
   capabilities = capabilities
 })
 
---[[
 lspconfig.tsserver.setup({
   auto_start = true,
-  single_file_support = true,
+  single_file_support = false,
   flags = {
     debounce_text_changes = 150
   },
@@ -192,7 +207,7 @@ lspconfig.tsserver.setup({
   end,
   capabilities = capabilities
 })
-]]--
+
 
 -- this is for diagnositcs signs on the line number column
 -- use this to beautify the plain E W signs to more fun ones
