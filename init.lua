@@ -22,6 +22,7 @@ vim.opt.backup = false
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
+-- Download Lazy.nvim if it doesn't exist
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -64,68 +65,6 @@ vim.g.everforest_better_performance = 1
 vim.g.everforest_diagnostic_text_highlight = 1
 vim.cmd [[ colorscheme everforest ]]
 
--- plugins setup
-require('lualine').setup({
-  options = {
-    theme = 'everforest',
-    disabled_filetypes = {
-      'NvimTree'
-    },
-  }
-})
-
-require("bufferline").setup({
-  options = {
-    offsets = {
-      {
-        filetype = "NvimTree",
-        text = "Nvim Tree",
-        separator = true
-      }
-    },
-  }
-})
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-
-require('nvim-treesitter.configs').setup({
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { 
-    "c",
-    "lua",
-    "vim",
-    "vimdoc",
-    "query",
-    "rust",
-    "javascript",
-    "typescript",
-    "html",
-    "css",
-    "scss"
-  },
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  highlight = {
-    enable = true,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-})
-
 -- Folding options
 vim.opt.foldlevel = 99
 vim.opt.foldmethod = "expr"
@@ -133,46 +72,7 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.wo.foldcolumn = "1"
 vim.o.statuscolumn = "%l%s%C"
 
-local bin = require("statuscol.builtin")
-require("statuscol").setup({
-  segments = {
-    { text = { "%s" }, click = "v:lua.ScSa" },
-    { text = { bin.lnumfunc }, click = "v:lua.ScLa", },
-    {
-      text = { " ", bin.foldfunc, " " },
-      condition = { bin.not_empty, true, builtin.not_empty },
-      click = "v:lua.ScFa"
-    },
-  }
-})
-
-require("nvim-tree").setup({
-  update_focused_file = {
-    enable = true,
-    update_cwd = true,
-    ignore_list = {},
-  }
-})
-
-vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { silent = true })
-vim.keymap.set("n", "<leader>1", ":NvimTreeFocus<CR>", { silent = true })
-
-require('neoscroll').setup({
-    -- All these keys will be mapped to their corresponding default scrolling animation
-    mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>',
-                '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
-    hide_cursor = true,          -- Hide cursor while scrolling
-    stop_eof = true,             -- Stop at <EOF> when scrolling downwards
-    respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-    cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
-    easing_function = nil,       -- Default easing function
-    pre_hook = nil,              -- Function to run before the scrolling animation starts
-    post_hook = nil,             -- Function to run after the scrolling animation ends
-    performance_mode = true,    -- Disable "Performance Mode" on all buffers.
-})
-
-require('gitsigns').setup()
-
+-- LSP / DAP Setup
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
@@ -185,7 +85,7 @@ lspconfig.cssls.setup({
 })
 
 lspconfig.eslint.setup({
-  on_attach = function(client, bufnr)
+  on_attach = function(_, bufnr)
     vim.api.nvim_create_autocmd("BufWritePre", {
       buffer = bufnr,
       command = "EslintFixAll",
