@@ -22,6 +22,13 @@ vim.opt.backup = false
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
+vim.on_key(function(char)
+  if vim.fn.mode() == "n" then
+    local new_hlsearch = vim.tbl_contains({ "<CR>", "n", "N", "*", "#", "?", "/" }, vim.fn.keytrans(char))
+    if vim.opt.hlsearch:get() ~= new_hlsearch then vim.opt.hlsearch = new_hlsearch end
+  end
+end, vim.api.nvim_create_namespace "auto_hlsearch")
+
 -- Download Lazy.nvim if it doesn't exist
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -49,15 +56,22 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader>qq", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>q", ":bdelete<CR>")
+vim.keymap.set("n", "<leader>q", ":bd<CR>")
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>cs", "<C-w>c", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
 vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
 vim.keymap.set("n", "<leader>tt", ':TroubleToggle<CR>', { silent = true })
 vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
+
+vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
+vim.keymap.set("n", "<C-h>", "<C-w>h<CR>", { noremap = false, silent = true })
+vim.keymap.set("n", "<C-l>", "<C-w>l<CR>", { noremap = false, silent = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j<CR>", { noremap = false, silent = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k<CR>", { noremap = false, silent = true })
 
 -- setup theme
 vim.g.everforest_background = 'soft'
@@ -122,10 +136,7 @@ require("statuscol").setup({
 
 vim.opt.list = true;
 
-require("indent_blankline").setup({
-  show_current_context = true,
-  show_current_context_start = true,
-})
+require("ibl").setup()
 
 -- LSP / DAP Setup
 local capabilities = vim.lsp.protocol.make_client_capabilities()
