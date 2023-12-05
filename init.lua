@@ -11,7 +11,7 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 
 vim.opt.colorcolumn = "80"
-vim.opt.updatetime = 300
+vim.opt.updatetime = 800
 
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.wrap = false
@@ -70,8 +70,6 @@ vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true
 vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
 vim.keymap.set("n", "<C-h>", "<C-w>h<CR>", { noremap = false, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l<CR>", { noremap = false, silent = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j<CR>", { noremap = false, silent = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k<CR>", { noremap = false, silent = true })
 
 -- setup theme
 vim.g.everforest_background = 'soft'
@@ -245,3 +243,4 @@ vim.fn.sign_define('DapStopped', { text='', texthl='DapStopped', linehl='DapS
 require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
 
 require("lsp_lines").setup()
+
