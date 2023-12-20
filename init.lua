@@ -55,8 +55,8 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
-vim.keymap.set("n", "<leader>qq", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>q", ":bd<CR>")
+vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
+vim.keymap.set("n", "<leader>q", ":bd<CR>", { nowait = true })
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
