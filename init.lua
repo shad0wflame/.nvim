@@ -111,29 +111,6 @@ require('nvim-treesitter.configs').setup({
   },
 })
 
--- Folding options
-vim.opt.foldlevel = 99
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.wo.foldcolumn = "1"
-vim.o.statuscolumn = "%l%s%C"
-
-
-local builtin = require("statuscol.builtin")
-require("statuscol").setup({
-  segments = {
-    { text = { "%s" }, click = "v:lua.ScSa" },
-    { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
-    {
-      text = { " ", builtin.foldfunc, " " },
-      condition = { builtin.not_empty, true, builtin.not_empty },
-      click = "v:lua.ScFa"
-    },
-  }
-})
-
-vim.opt.list = true;
-
 require("ibl").setup()
 
 -- LSP / DAP Setup
