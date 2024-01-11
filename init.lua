@@ -21,6 +21,7 @@ vim.opt.backup = false
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
+vim.opt.cursorline = true
 
 vim.on_key(function(char)
   if vim.fn.mode() == "n" then
@@ -56,7 +57,7 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>q", ":bd<CR>", { nowait = true })
+vim.keymap.set("n", "<leader>q", ":bd<CR>", { nowait = true, silent = true })
 
 vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
@@ -70,6 +71,10 @@ vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true
 vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
 vim.keymap.set("n", "<C-h>", "<C-w>h<CR>", { noremap = false, silent = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l<CR>", { noremap = false, silent = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j<CR>", { noremap = false, silent = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k<CR>", { noremap = false, silent = true })
+
+
 
 -- setup theme
 vim.g.everforest_background = 'soft'

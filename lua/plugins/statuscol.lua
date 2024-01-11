@@ -8,7 +8,28 @@ return {
   },
   config = function()
     local gitsigns = require("gitsigns")
-    gitsigns.setup()
+    gitsigns.setup({
+      on_attach = function(bufnr)
+
+        -- Setup keymaps
+        vim.api.nvim_buf_set_keymap(
+          bufnr,
+          'n',
+          ']',
+          '<cmd>lua require"gitsigns".next_hunk()<CR>',
+          {nowait = true, noremap = true, silent = true}
+        )
+
+        vim.api.nvim_buf_set_keymap(
+          bufnr,
+          'n',
+          '[',
+          '<cmd>lua require"gitsigns".prev_hunk()<CR>',
+          {nowait = true, noremap = true, silent = true}
+        )
+
+      end,
+    })
 
     -- Folding options
     vim.opt.foldlevel = 99
