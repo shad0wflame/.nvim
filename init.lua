@@ -74,8 +74,6 @@ vim.keymap.set("n", "<C-l>", "<C-w>l<CR>", { noremap = false, silent = true })
 vim.keymap.set("n", "<C-j>", "<C-w>j<CR>", { noremap = false, silent = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k<CR>", { noremap = false, silent = true })
 
-
-
 -- setup theme
 vim.g.everforest_background = 'soft'
 vim.g.everforest_better_performance = 1
@@ -167,7 +165,7 @@ end
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics,
     {
-      virtual_text = false,
+      virtual_text = true,
       signs = true,
       update_in_insert = false,
       underline = true,
@@ -223,6 +221,3 @@ vim.fn.sign_define('DapLogPoint', { text='', texthl='DapLogPoint', linehl='Da
 vim.fn.sign_define('DapStopped', { text='', texthl='DapStopped', linehl='DapStopped', numhl= 'DapStopped' })
 
 require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
-
-require("lsp_lines").setup()
-
