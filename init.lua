@@ -22,6 +22,7 @@ vim.opt.backup = false
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.cursorline = true
+vim.opt.smartindent = true
 
 vim.on_key(function(char)
   if vim.fn.mode() == "n" then
