@@ -59,20 +59,14 @@ vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
 vim.keymap.set("n", "<leader>q", ":bd<CR>", { nowait = true, silent = true })
 
-vim.keymap.set("n", "<leader>hs", "<C-w>s", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>vs", "<C-w>v", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>cs", "<C-w>c", { noremap = true, silent = true })
-
 vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
 vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
 vim.keymap.set("n", "<leader>tt", ':TroubleToggle<CR>', { silent = true })
 vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
 
 vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
-vim.keymap.set("n", "<C-h>", "<C-w>h<CR>", { noremap = false, silent = true })
-vim.keymap.set("n", "<C-l>", "<C-w>l<CR>", { noremap = false, silent = true })
-vim.keymap.set("n", "<C-j>", "<C-w>j<CR>", { noremap = false, silent = true })
-vim.keymap.set("n", "<C-k>", "<C-w>k<CR>", { noremap = false, silent = true })
+
+vim.keymap.set("n", "b", "<C-W>", { noremap = true, silent = true })
 
 -- setup theme
 vim.g.everforest_background = 'soft'
