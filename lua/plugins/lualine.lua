@@ -61,16 +61,17 @@ return {
       options = {
         theme = 'everforest',
         disabled_filetypes = {
-          'NvimTree'
+          'nvimtree'
         },
-        sections = {
-          lualine_a = { "mode" },
-          lualine_b = { "filename" },
-          lualine_c = {
-            -- invoke `progress` here.
-            require('lsp-progress').progress,
-          },
-        }
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff", "diagnostics" },
+        lualine_c = {
+          "filename",
+          -- invoke `progress` here.
+          require('lsp-progress').progress,
+        },
       }
     })
 
@@ -81,5 +82,6 @@ return {
       pattern = "LspProgressStatusUpdated",
       callback = require("lualine").refresh,
     })
+
   end
 }
