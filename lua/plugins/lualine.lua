@@ -65,7 +65,7 @@ return {
         },
       },
       sections = {
-        lualine_a = { "mode" },
+        lualine_a = { { "mode", fmt = function(mode) return mode:sub(1,3) end } },
         lualine_b = { "branch", "diff", "diagnostics" },
         lualine_c = {
           "filename",
