@@ -115,21 +115,19 @@ return {
               capabilities = capabilities,
             })
           end,
+          eslint = function()
+            require('lspconfig').eslint.setup({
+              on_attach = function(_, bufnr)
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                  buffer = bufnr,
+                  command = "EslintFixAll",
+                })
+              end,
+              capabilities = capabilities
+            })
+          end,
         },
       })
-
-      --[[
-      (remnant of 2.0) Setup ESLing with auto-fix on save
-      lspconfig.eslint.setup({
-        on_attach = function(_, bufnr)
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = bufnr,
-            command = "EslintFixAll",
-          })
-        end,
-        capabilities = capabilities
-      })
-      --]]
 
       -- this is for diagnositcs signs on the line number column
       -- use this to beautify the plain E W signs to more fun ones
