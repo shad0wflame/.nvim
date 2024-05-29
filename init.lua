@@ -75,6 +75,10 @@ vim.g.everforest_better_performance = 1
 vim.g.everforest_diagnostic_text_highlight = 1
 vim.cmd [[ colorscheme everforest ]]
 
+vim.api.nvim_create_user_command('W', function()
+  vim.cmd("w")
+end, {nargs = 0})
+
 require('nvim-treesitter.configs').setup({
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = {
@@ -111,62 +115,7 @@ require('nvim-treesitter.configs').setup({
 
 require("ibl").setup()
 
--- LSP / DAP Setup
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-
-local lspconfig = require("lspconfig")
-local util = require("lspconfig/util")
-
-lspconfig.cssls.setup({
-  capabilities = capabilities
-})
-
-lspconfig.eslint.setup({
-  on_attach = function(_, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
-  capabilities = capabilities
-})
-
-lspconfig.tsserver.setup({
-  auto_start = true,
-  single_file_support = false,
-  flags = {
-    debounce_text_changes = 150
-  },
-  root_dir = function (pattern)
-    local cwd  = vim.loop.cwd();
-    local root = util.root_pattern("package.json", "tsconfig.json", ".git")(pattern);
-    return root or cwd;
-  end,
-  capabilities = capabilities
-})
-
-
--- this is for diagnositcs signs on the line number column
--- use this to beautify the plain E W signs to more fun ones
--- !important nerdfonts needs to be setup for this to work in your terminal
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl= hl, numhl = hl })
-end
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics,
-    {
-      virtual_text = true,
-      signs = true,
-      update_in_insert = false,
-      underline = true,
-    }
-)
-
+-- DAP Setup
 local dap, dapui = require("dap"), require("dapui")
 dapui.setup()
 
