@@ -7,8 +7,8 @@ vim.opt.termguicolors = true
 
 vim.o.expandtab = true
 vim.o.smartindent = true
-vim.o.tabstop = 2
-vim.o.shiftwidth = 2
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 
 vim.opt.colorcolumn = "80"
 vim.opt.updatetime = 800
@@ -58,7 +58,7 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
 vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>q", ":bd<CR>", { nowait = true, silent = true })
+vim.keymap.set("n", "<leader>q", ":bd!<CR>", { nowait = true, silent = true })
 
 vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
 vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
@@ -69,6 +69,12 @@ vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
 vim.keymap.set("n", "b", "<C-W>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F9>", ":LspRestart<CR>", { noremap = true, silent = true })
 
+LinebreakToggle = function ()
+  vim.wo.wrap = not vim.wo.wrap
+  vim.wo.linebreak = not vim.wo.linebreak
+end
+
+vim.keymap.set("n", "<F10>", ":lua LinebreakToggle()<cr>", { noremap = true, silent = true })
 -- setup theme
 vim.g.everforest_background = 'soft'
 vim.g.everforest_better_performance = 1

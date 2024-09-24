@@ -76,7 +76,6 @@ return {
         },
         servers = {
           ['eslint'] = {'javascript', 'typescript', 'typescriptreact'},
-          ['rust_analyzer'] = {'rust'},
         }
       })
 
@@ -86,7 +85,7 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = {
           'eslint',
-          'tsserver',
+          'ts_ls',
           'rust_analyzer',
         },
         handlers = {
@@ -99,9 +98,9 @@ return {
             local lua_opts = lsp_zero.nvim_lua_ls()
             require('lspconfig').lua_ls.setup(lua_opts)
           end,
-          tsserver = function()
+          ts_ls = function()
             local util = require('lspconfig/util')
-            require('lspconfig').tsserver.setup({
+            require('lspconfig').ts_ls.setup({
               auto_start = true,
               single_file_support = false,
               flags = {
@@ -123,6 +122,120 @@ return {
                   command = "EslintFixAll",
                 })
               end,
+              capabilities = capabilities
+            })
+          end,
+          pyright = function()
+            local util = require('lspconfig/util')
+            local path = util.path
+
+            local function get_python_path(--[[workspace--]])
+              -- To use Django install this:
+              -- pip install django-stubs
+
+              -- Use activated virtualenv.
+              if vim.env.VIRTUAL_ENV then
+                return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+              end
+
+              --[[ Find and use virtualenv in workspace directory.
+              for _, pattern in ipairs({'*', '.*'}) do
+                local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
+                if match ~= '' then
+                  return path.join(path.dirname(match), 'bin', 'python')
+                end
+              end--]]
+
+              -- Fallback to system Python.
+              return vim.fn.exepath('python3') or vim.fn.exepath('python') or 'python'
+            end
+
+            require('lspconfig').pyright.setup({
+              on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path()
+              end,
+              capabilities = capabilities
+            })
+          end,
+          pylsp = function()
+            local util = require('lspconfig/util')
+            local path = util.path
+
+            local function get_python_path(--[[workspace--]])
+              -- Use activated virtualenv.
+              if vim.env.VIRTUAL_ENV then
+                return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+              end
+
+              --[[ Find and use virtualenv in workspace directory.
+              for _, pattern in ipairs({'*', '.*'}) do
+                local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
+                if match ~= '' then
+                  return path.join(path.dirname(match), 'bin', 'python')
+                end
+              end--]]
+
+              -- Fallback to system Python.
+              return vim.fn.exepath('python3') or vim.fn.exepath('python') or 'python'
+            end
+
+            require('lspconfig').pylsp.setup({
+              settings = {
+                plugins = {
+                  -- Virtual envs
+                  jedi = {
+                    auto_import_modules = {"app"},
+                    environment = get_python_path(),
+                  },
+                  jedi_completion = {
+                    enabled = true,
+                    fuzzy = true,
+                  },
+                  -- Lint
+                  ruff = {
+                    enabled = true,
+                    select = {
+                      -- enable pycodestyle
+                      "E",
+                      -- enable pyflakes
+                      "F",
+                    },
+                    ignore = {
+                      -- ignore E501 (line too long)
+                      -- "E501",
+                      -- ignore F401 (imported but unused)
+                      -- "F401",
+                    },
+                    extendSelect = { "I" },
+                    severities = {
+                      -- Hint, Information, Warning, Error
+                      F401 = "I",
+                      E501 = "I",
+                    },
+                  },
+                  flake8 = { enabled = false },
+                  pyflakes = { enabled = false },
+                  pycodestyle = { enabled = false },
+                  mccabe = { enabled = false },
+
+                  -- Code refactor
+                  rope = { enabled = true },
+
+                  -- Code autocompletion
+                  rope_autoimport = {
+                    enabled = true,
+                  },
+                  rope_completion = {
+                    enabled = true,
+                  },
+
+                  -- Formatting
+                  black = { enabled = true },
+                  pyls_isort = { enabled = false },
+                  autopep8 = { enabled = false },
+                  yapf = { enabled = false },
+                },
+              },
               capabilities = capabilities
             })
           end,
