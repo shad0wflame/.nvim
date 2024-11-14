@@ -13,7 +13,7 @@ return {
     telescope.load_extension('live_grep_args')
 
     -- Setup keymaps
-    vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+    vim.keymap.set('n', '<leader>ff', ":lua require('telescope.builtin').find_files{ path_display = { 'smart' } }<CR>", {})
     vim.keymap.set('n', '<leader>fg', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
     vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
     vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
