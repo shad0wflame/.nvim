@@ -85,8 +85,8 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = {
           'eslint',
-          'ts_ls',
           'rust_analyzer',
+          'vtsls'
         },
         handlers = {
           function(server_name)
@@ -102,7 +102,7 @@ return {
             local util = require('lspconfig/util')
             require('lspconfig').ts_ls.setup({
               auto_start = true,
-              single_file_support = false,
+              single_file_support = true,
               flags = {
                 debounce_text_changes = 150
               },
