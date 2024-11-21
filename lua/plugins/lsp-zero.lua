@@ -1,7 +1,7 @@
 return {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
+    branch = 'v4.x',
     lazy = true,
     config = false,
     init = function()
@@ -21,7 +21,7 @@ return {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
-      {'L3MON4D3/LuaSnip'},
+      { 'L3MON4D3/LuaSnip' },
     },
     config = function()
       -- Here is where you configure the autocompletion settings.
@@ -33,6 +33,11 @@ return {
       local cmp_action = require('lsp-zero.cmp').action()
 
       cmp.setup({
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'treesitter' },
+        },
         formatting = lsp_zero.cmp_format({details = true}),
         mapping = {
           -- Enter key to confirm completion 
@@ -61,9 +66,15 @@ return {
       {'williamboman/mason-lspconfig.nvim'},
     },
     config = function()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
       -- This is where all the LSP shenanigans will live
       local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_lspconfig()
+      lsp_zero.extend_lspconfig({
+        capabilities = capabilities,
+        sign_text = true
+      })
 
       lsp_zero.on_attach(function(client, bufnr)
         lsp_zero.default_keymaps({buffer = bufnr})
@@ -76,11 +87,9 @@ return {
         },
         servers = {
           ['eslint'] = {'javascript', 'typescript', 'typescriptreact'},
+          ['biome'] = {'javascript', 'typescript', 'typescriptreact'},
         }
       })
-
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
       require('mason-lspconfig').setup({
         ensure_installed = {
@@ -89,11 +98,6 @@ return {
           'vtsls'
         },
         handlers = {
-          function(server_name)
-            require('lspconfig')[server_name].setup({
-              capabilities = capabilities,
-            })
-          end,
           lua_ls = function()
             local lua_opts = lsp_zero.nvim_lua_ls()
             require('lspconfig').lua_ls.setup(lua_opts)
@@ -112,6 +116,12 @@ return {
                 return root or cwd;
               end,
               capabilities = capabilities,
+            })
+          end,
+          vtsls = function()
+            require('lspconfig').vtsls.setup({
+              single_file_support = true,
+              capabilities = capabilities
             })
           end,
           eslint = function()
