@@ -57,8 +57,8 @@ vim.keymap.set("v", "<S-Down>", ":m '>+1<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>ww", ":wa<CR>")
 vim.keymap.set("n", "<leader>w", ":w<CR>")
+-- vim.keymap.set("n", "<leader>q", ":bd!<CR>", { nowait = true, silent = true })
 vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
-vim.keymap.set("n", "<leader>q", ":bd!<CR>", { nowait = true, silent = true })
 
 vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
 vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
