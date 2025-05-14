@@ -3,6 +3,8 @@ return {
 	version = '*',
 	dependencies = 'nvim-tree/nvim-web-devicons',
   config = function ()
+    vim.api.nvim_command("autocmd FileType qf set nobuflisted");
+
     require("bufferline").setup({
       options = {
         offsets = {

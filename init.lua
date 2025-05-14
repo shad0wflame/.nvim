@@ -1,6 +1,11 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- Exclude quickfix list from bufferline
+vim.g.bufferline = {
+    exclude_ft = {'qf'},
+}
+
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.opt.termguicolors = true
@@ -60,14 +65,12 @@ vim.keymap.set("n", "<leader>w", ":w<CR>")
 -- vim.keymap.set("n", "<leader>q", ":bd!<CR>", { nowait = true, silent = true })
 vim.keymap.set("n", "<leader><esc>", ":quitall!<CR>")
 
-vim.keymap.set("n", "<leader>cr", ':lua vim.lsp.buf.rename()<CR>')
-vim.keymap.set("n", "<leader>ca", ':lua vim.lsp.buf.code_action()<CR>')
-vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
-
 vim.keymap.set("n", "<tab>", ":BufferLinePick<CR>", { silent = true })
 
 vim.keymap.set("n", "b", "<C-W>", { noremap = true, silent = true })
 vim.keymap.set("n", "<F9>", ":LspRestart<CR>", { noremap = true, silent = true })
+
+-- Toggle wrap and linebreak
 
 LinebreakToggle = function ()
   vim.wo.wrap = not vim.wo.wrap
@@ -75,6 +78,7 @@ LinebreakToggle = function ()
 end
 
 vim.keymap.set("n", "<F10>", ":lua LinebreakToggle()<cr>", { noremap = true, silent = true })
+
 -- setup theme
 vim.g.everforest_background = 'soft'
 vim.g.everforest_better_performance = 1
