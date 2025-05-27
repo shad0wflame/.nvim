@@ -71,9 +71,46 @@ return {
             vim.lsp.config("vtsls", {
                 workspace_required = true,
                 settings = {
+                    refactor_auto_rename = true,
+                    complete_function_calls = true,
+                    vtsls = {
+                        enableMoveToFileCodeAction = true,
+                        autoUseWorkspaceTsdk = true,
+                        experimental = {
+                            completion = {
+                                enableServerSideFuzzyMatch = true,
+                                entriesLimit = 20,
+                            },
+                        }
+                    },
                     typescript = {
                         format = {
                             enable = false
+                        },
+                        inlayHints = {
+                            parameterNames = { enabled = "literals" },
+                            parameterTypes = { enabled = true },
+                            variableTypes = { enabled = true },
+                            propertyDeclarationTypes = { enabled = true },
+                            functionLikeReturnTypes = { enabled = true },
+                            enumMemberValues = { enabled = true },
+                        },
+                        updateImportsOnFileMove = { enabled = "always" },
+                        suggest = {
+                            completeFunctionCalls = true,
+                            autoImports = true
+                        },
+                        tsserver = {
+                            useSeparateSyntaxServer = true,
+                            experimental = {
+                                enableProjectDiagnostics = true,
+                            },
+                        },
+                        preferences = {
+                            -- importModuleSpecifier = "project-relative",
+                            importModuleSpecifier = "shortest",
+                            includePackageJsonAutoImports = "on",
+                            preferTypeOnlyAutoImports = true
                         },
                     },
                 },
@@ -105,8 +142,8 @@ return {
                     vim.keymap.set('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
                     vim.keymap.set('n', 'grd', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
 
-                    vim.keymap.set("n", "<F2>", ':lua vim.lsp.buf.rename()<CR>')
-                    vim.keymap.set("n", "<F4>", ':lua vim.lsp.buf.code_action()<CR>')
+                    vim.keymap.set("n", "<F2>", ':lua vim.lsp.buf.rename()<CR>', { silent = true })
+                    vim.keymap.set("n", "<F4>", ':lua vim.lsp.buf.code_action()<CR>', { silent = true })
                     vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
 
                     -- Autocompletion
@@ -139,10 +176,6 @@ return {
             -- this is for diagnositcs signs on the line number column
             -- use this to beautify the plain E W signs to more fun ones
             -- !important nerdfonts needs to be setup for this to work in your terminal
-            local signs = {}
-            for type, icon in pairs(signs) do
-                local hl = "DiagnosticSign" .. type
-            end
             vim.diagnostic.config({
                 signs = {
                     text = {
