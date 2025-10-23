@@ -128,6 +128,17 @@ return {
                 workspace_required = true,
             })
 
+            -- Creating a simple setTimeout wrapper
+            local function setTimeout(timeout, callback)
+                local timer = vim.uv.new_timer()
+                timer:start(timeout, 0, function()
+                    timer:stop()
+                    timer:close()
+                    callback()
+                end)
+                return timer
+            end
+
             vim.api.nvim_create_autocmd('LspAttach', {
                 callback = function(args)
                     -- Keymaps
@@ -145,6 +156,11 @@ return {
                     vim.keymap.set("n", "<F2>", ':lua vim.lsp.buf.rename()<CR>', { silent = true })
                     vim.keymap.set("n", "<F4>", ':lua vim.lsp.buf.code_action()<CR>', { silent = true })
                     vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
+
+                    vim.keymap.set("n", "<F9>", function()
+                        vim.lsp.stop_client(vim.lsp.get_clients())
+                        vim.api.nvim_command(':e')
+                    end, { noremap = true, silent = true })
 
                     -- Autocompletion
 
@@ -221,7 +237,11 @@ return {
                 "cssls",
                 "jsonls",
                 "pyright",
-                "lua_ls"
+                "lua_ls",
+                "taplo",
+                "gh_actions_ls",
+                "terraformls"
+                --"tsgo"
             });
         end
     },
