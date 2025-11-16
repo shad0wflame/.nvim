@@ -8,6 +8,6 @@ return {
         vim.g.everforest_diagnostic_text_highlight = 1
     end,
     config = function()
-        vim.cmd [[ colorscheme everforest ]]
+        --vim.cmd [[ colorscheme everforest ]]
     end
 }

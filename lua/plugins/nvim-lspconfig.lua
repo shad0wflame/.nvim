@@ -157,10 +157,15 @@ return {
                     vim.keymap.set("n", "<F4>", ':lua vim.lsp.buf.code_action()<CR>', { silent = true })
                     vim.keymap.set("n", "<C-space>", ':lua vim.lsp.buf.hover()<CR>', { silent = true })
 
+                    --[[
                     vim.keymap.set("n", "<F9>", function()
-                        vim.lsp.stop_client(vim.lsp.get_clients())
+                        vim.lsp.stop_client(vim.lsp.get_active_clients())
                         vim.api.nvim_command(':e')
                     end, { noremap = true, silent = true })
+                    ]]
+
+                    vim.keymap.set("n", "<F9>", '<cmd>LspRestart<CR>', { noremap = true, silent = true })
+
 
                     -- Autocompletion
 
@@ -240,7 +245,8 @@ return {
                 "lua_ls",
                 "taplo",
                 "gh_actions_ls",
-                "terraformls"
+                "terraformls",
+                "gopls",
                 --"tsgo"
             });
         end
