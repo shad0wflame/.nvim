@@ -247,6 +247,7 @@ return {
                 "gh_actions_ls",
                 "terraformls",
                 "gopls",
+                "yamlls",
                 --"tsgo"
             });
         end
