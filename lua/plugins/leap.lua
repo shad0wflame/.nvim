@@ -1,5 +1,5 @@
 return {
-    "ggandor/leap.nvim",
+    "https://codeberg.org/andyg/leap.nvim",
     config = function()
         -- Highly recommended: define a preview filter to reduce visual noise
         -- and the blinking effect after the first keypress
