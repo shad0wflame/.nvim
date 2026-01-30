@@ -8,6 +8,7 @@ return {
     config = function()
         vim.g.opencode_opts = {
             -- Your configuration, if any — see `lua/opencode/config.lua`
+            port = 10888,
             prompts = {
                 -- With an "Ask" item, the select menu can serve as the only entrypoint to all plugin-exclusive functionality, without numerous keymaps.
                 ask = { prompt = "", ask = true, submit = true },
@@ -22,8 +23,6 @@ return {
                 buffer = { prompt = "@buffer" },
                 this = { prompt = "@this" },
             },
-            on_send = nil,
-            on_opencode_not_found = nil
         }
 
         -- Required for `vim.g.opencode_opts.auto_reload`
